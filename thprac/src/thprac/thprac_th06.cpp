@@ -23,7 +23,7 @@ namespace TH06 {
     float g_last_boss_x, g_last_boss_y;
 
     static bool is_died = false;
-   
+    int lock_timer = 0;
 
     bool THBGMTest();
     using std::pair;
@@ -297,7 +297,6 @@ namespace TH06 {
         Gui::GuiHotKey mShowSpellCapture { THPRAC_INGAMEINFO, "F8", VK_F8 };
     };
 
-    
     class TH06InGameInfo : public Gui::GameGuiWnd {
         TH06InGameInfo() noexcept
         {
@@ -726,9 +725,17 @@ namespace TH06 {
             last_tot_hp = cur_tot_hp;
             last_has_SCB = cur_has_SCB;
 
-             // books time
             DWORD gameState = *(DWORD*)(0x6C6EA4);
             BYTE pauseMenuState = *(BYTE*)(0x69D4BF);
+
+            // lock timer
+            if (*(BYTE*)0x412DD1 == 0xEB && *(DWORD*)0x69BC48 != 0 && pauseMenuState == 0) {
+                lock_timer++;
+            } else if (*(BYTE*)0x412DD1 == 0x75 || *(DWORD*)0x69BC48 == 0) {
+                lock_timer = 0;
+            }
+
+            // books time
             if (is_magic_book && thPracParam.mode && (thPracParam.phase != 0)) { // books
                 if (gameState == 2 && pauseMenuState == 0) {
                     time_books++;
@@ -1581,6 +1588,7 @@ namespace TH06 {
             TH_LIFE, TH_BOMB, TH_SCORE, TH_POWER, TH_GRAZE, TH_POINT,
             TH06_RANK, TH06_RANKLOCK, TH06_FS };
     };
+
     class THGuiRep : public Gui::GameGuiWnd {
         THGuiRep() noexcept
         {
@@ -3068,13 +3076,13 @@ namespace TH06 {
         if (thPracParam.mode == 1) {
             // TODO: Probably remove this ASM comment?
             /*
-					mov eax,dword ptr [@MENU_RANK]
-					mov dword ptr [69d710],eax
-					cmp dword ptr [@MENU_RANKLOCK],@MENU_ON_STR
-					jnz @f
-					mov dword ptr [69d714],eax
-					mov dword ptr [69d718],eax
-				*/
+                    mov eax,dword ptr [@MENU_RANK]
+                    mov dword ptr [69d710],eax
+                    cmp dword ptr [@MENU_RANKLOCK],@MENU_ON_STR
+                    jnz @f
+                    mov dword ptr [69d714],eax
+                    mov dword ptr [69d718],eax
+                */
             *(int8_t*)(0x69d4ba) = (int8_t)thPracParam.life;
             *(int8_t*)(0x69d4bb) = (int8_t)thPracParam.bomb;
             *(int16_t*)(0x69d4b0) = (int16_t)thPracParam.power;
@@ -3201,7 +3209,6 @@ namespace TH06 {
             pCtx->Eip = 0x40e1d8;
         }
     }
-
 
     EHOOK_DY(th06_wall_prac_boss_pos, 0x40907F)
     {
@@ -3495,6 +3502,18 @@ namespace TH06 {
             }
         }
     }
+    static void RenderLockTimer(ImDrawList* p)
+    {
+        if (*(BYTE*)0x412DD1 == 0xEB && *(DWORD*)0x69BC48 != 0) {
+            char time_text[32];
+            sprintf(time_text, "%.2f", (float)lock_timer / 60.0f);
+            auto f = ImGui::GetFont();
+            auto sz = f->CalcTextSizeA(16, 100, 100, time_text);
+            ImVec2 p1 = { 110.0f, 16.0f };
+            p->AddRectFilled({ p1.x - sz.x, p1.y - sz.y }, p1, 0xFFCCCCCC);
+            p->AddText(f, 16, { p1.x - sz.x, p1.y - sz.y }, 0xFFFF0000, time_text);
+        }
+    }
     
     EHOOK_DY(th06_books_position_test, 0x0041188A)
     {
@@ -3529,6 +3548,7 @@ namespace TH06 {
         }
         RenderRepMarker(p);
         RenderBtHitbox(p);
+        RenderLockTimer(p);
         if (g_adv_igi_options.show_keyboard_monitor && (*(DWORD*)(0x6C6EA4) == 2)) {
             g_adv_igi_options.keyboard_style.size = { 48.0f, 48.0f };
             KeysHUD(6, { 1280.0f, 0.0f }, { 833.0f, 0.0f }, g_adv_igi_options.keyboard_style);
@@ -3536,8 +3556,8 @@ namespace TH06 {
         {
             if (THAdvOptWnd::singleton().forceBossMoveDown) {
                 auto sz = ImGui::CalcTextSize(S(TH_BOSS_FORCE_MOVE_DOWN));
-                p->AddRectFilled({ 60.0f, 0.0f }, { sz.x + 120.0f, sz.y }, 0xFFCCCCCC);
-                p->AddText({ 60.0f, 0.0f }, 0xFFFF0000, S(TH_BOSS_FORCE_MOVE_DOWN));
+                p->AddRectFilled({ 120.0f, 0.0f }, { sz.x + 120.0f, sz.y }, 0xFFCCCCCC);
+                p->AddText({ 120.0f, 0.0f }, 0xFFFF0000, S(TH_BOSS_FORCE_MOVE_DOWN));
             }
         }
         
@@ -3587,8 +3607,8 @@ namespace TH06 {
             }
         }
     }
-
     HOOKSET_ENDDEF()
+
     HOOKSET_DEFINE(THInGameInfo)
     EHOOK_DY(th06_enter_game, 0x41BDE8) // set inner misscount to 0
     {
