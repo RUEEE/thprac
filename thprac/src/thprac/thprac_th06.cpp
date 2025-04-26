@@ -280,8 +280,6 @@ namespace TH06 {
             // new HookCtx(0x41BBE9, "\x80", 1),
             new HookCtx(0x428B7D, "\x00", 1),
             new HookCtx(0x428B67,"\x90\x90\x90\x90\x90\x90\x90\x90\x90", 9) } };
-        Gui::GuiHotKey mTimeLock { TH_TIMELOCK, "F5", VK_F5, {
-            new HookCtx(0x412DD1, "\xeb", 1) } };
         Gui::GuiHotKey mAutoBomb { TH_AUTOBOMB, "F6", VK_F6, {
             new HookCtx(0x428989, "\xEB\x1D", 2),
             new HookCtx(0x4289B4, "\x85\xD2", 2),
@@ -289,9 +287,12 @@ namespace TH06 {
             new HookCtx(0x428A9D, "\x66\xC7\x05\x04\xD9\x69\x00\x02", 8) } };
 
     public:
-        Gui::GuiHotKey mInfLives { TH_INFLIVES2, "F2", VK_F2, { 
+        Gui::GuiHotKey mInfLives { TH_INFLIVES2, "F2", VK_F2, {
             new HookCtx(0x428DDB, "\xA0\xBA\xD4\x69\x00\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90", 16), 
             new HookCtx(0x428AC6, "\x90\x90\x90\x90\x90\x90", 6) // do not drop F item
+        } };
+        Gui::GuiHotKey mTimeLock { TH_TIMELOCK, "F5", VK_F5, {
+            new HookCtx(0x412DD1, "\xeb", 1)
         } };
         Gui::GuiHotKey mElBgm { TH_EL_BGM, "F7", VK_F7 };
         Gui::GuiHotKey mShowSpellCapture { THPRAC_INGAMEINFO, "F8", VK_F8 };
@@ -725,17 +726,9 @@ namespace TH06 {
             last_tot_hp = cur_tot_hp;
             last_has_SCB = cur_has_SCB;
 
+            // books time
             DWORD gameState = *(DWORD*)(0x6C6EA4);
             BYTE pauseMenuState = *(BYTE*)(0x69D4BF);
-
-            // lock timer
-            if (*(BYTE*)0x412DD1 == 0xEB && *(DWORD*)0x69BC48 != 0 && pauseMenuState == 0) {
-                lock_timer++;
-            } else if (*(BYTE*)0x412DD1 == 0x75 || *(DWORD*)0x69BC48 == 0) {
-                lock_timer = 0;
-            }
-
-            // books time
             if (is_magic_book && thPracParam.mode && (thPracParam.phase != 0)) { // books
                 if (gameState == 2 && pauseMenuState == 0) {
                     time_books++;
@@ -3504,14 +3497,13 @@ namespace TH06 {
     }
     static void RenderLockTimer(ImDrawList* p)
     {
-        if (*(BYTE*)0x412DD1 == 0xEB && *(DWORD*)0x69BC48 != 0) {
-            char time_text[32];
-            sprintf(time_text, "%.2f", (float)lock_timer / 60.0f);
+        if (*THOverlay::singleton().mTimeLock && lock_timer > 0) {
+            std::string time_text = std::format("{:.2f}", (float)lock_timer / 60.0f);
             auto f = ImGui::GetFont();
-            auto sz = f->CalcTextSizeA(16, 100, 100, time_text);
+            auto sz = f->CalcTextSizeA(16, 100, 100, time_text.c_str());
             ImVec2 p1 = { 110.0f, 16.0f };
-            p->AddRectFilled({ p1.x - sz.x, p1.y - sz.y }, p1, 0xFFCCCCCC);
-            p->AddText(f, 16, { p1.x - sz.x, p1.y - sz.y }, 0xFFFF0000, time_text);
+            p->AddRectFilled({ 32.0f, p1.y - sz.y }, p1, 0xFFFFFFFF);
+            p->AddText(f, 16, { p1.x - sz.x, p1.y - sz.y }, 0xFF000000, time_text.c_str());
         }
     }
     
@@ -3622,6 +3614,25 @@ namespace TH06 {
     EHOOK_DY(th06_miss, 0x428DD9)// dec life
     {
         TH06InGameInfo::singleton().mMissCount++;
+    }
+
+    EHOOK_DY(th06_lock_timer1, 0x41B27C) // initialize
+    {
+        lock_timer = 0;
+    }
+    EHOOK_DY(th06_lock_timer2, 0x409A10) // set timeout
+    {
+        lock_timer = 0;
+    }
+    EHOOK_DY(th06_lock_timer3, 0x408DDA) // set boss mode
+    {
+        lock_timer = 0;
+    }
+    EHOOK_DY(th06_lock_timer4, 0x411F88) // decrease time (update)
+    {
+        if (*THOverlay::singleton().mTimeLock) {
+            lock_timer++;
+        }
     }
 
     EHOOK_DY(th06_autoName_score,0x42BE49){
