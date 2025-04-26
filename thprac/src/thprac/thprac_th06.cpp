@@ -3630,9 +3630,7 @@ namespace TH06 {
     }
     EHOOK_DY(th06_lock_timer4, 0x411F88) // decrease time (update)
     {
-        if (*THOverlay::singleton().mTimeLock) {
-            lock_timer++;
-        }
+        lock_timer++;
     }
 
     EHOOK_DY(th06_autoName_score,0x42BE49){
