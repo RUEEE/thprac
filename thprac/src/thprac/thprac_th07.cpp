@@ -2062,11 +2062,9 @@ namespace TH07 {
     {
         if (*THOverlay::singleton().mTimeLock && g_lock_timer > 0) {
             std::string time_text = std::format("{:.2f}", (float)g_lock_timer / 60.0f);
-            auto f = ImGui::GetFont();
-            auto sz = f->CalcTextSizeA(16, 100, 100, time_text.c_str());
-            ImVec2 p1 = { 110.0f, 16.0f };
-            p->AddRectFilled({ 32.0f, p1.y - sz.y }, p1, 0xFFFFFFFF);
-            p->AddText(f, 16, { p1.x - sz.x, p1.y - sz.y }, 0xFF000000, time_text.c_str());
+            auto sz = ImGui::CalcTextSize(time_text.c_str());
+            p->AddRectFilled({ 32.0f, 0.0f }, { 110.0f, sz.y }, 0xFFFFFFFF);
+            p->AddText({ 110.0f - sz.x, 0.0f }, 0xFF000000, time_text.c_str());
         }
     }
 
