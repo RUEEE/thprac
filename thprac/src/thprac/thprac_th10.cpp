@@ -2843,6 +2843,10 @@ namespace TH10 {
     {
         g_lock_timer++;
     })
+    EHOOK_DY(th10_lock_timer5, 0x40E1B6,6, // decrease boss HP (recover)
+    {
+        g_lock_timer--;
+    })
     HOOKSET_ENDDEF()
 
         
