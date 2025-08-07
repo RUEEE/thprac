@@ -1820,7 +1820,6 @@ namespace TH18 {
                     }
                 }
 
-
                 if (ImGui::Checkbox(S(TH_BOSS_FORCE_MOVE_DOWN), &forceBossMoveDown)) {
                     th18_bossmovedown.Toggle(forceBossMoveDown);
                 }
@@ -1848,7 +1847,6 @@ namespace TH18 {
                         th18_bossmovement[3].Toggle(true);
                     }
                 }
-                
 
                 if (ImGui::Checkbox(S(TH_DISABLE_MASTER), &g_adv_igi_options.disable_master_autoly)) {
                     for (int i = 0; i < 3; i++)
@@ -1856,6 +1854,7 @@ namespace TH18 {
                 }
                 ImGui::SameLine();
                 HelpMarker(S(TH_DISABLE_MASTER_DESC));
+                ImGui::Checkbox(S(TH_ENABLE_LOCK_TIMER), &g_adv_igi_options.enable_lock_timer_autoly);
 
                 if (GameplayOpt(mOptCtx))
                     GameplaySet();
@@ -3044,7 +3043,7 @@ namespace TH18 {
             g_lock_timer_flag = false;
         }
 
-        if (*THOverlay::singleton().mTimeLock && g_lock_timer > 0) {
+        if (g_adv_igi_options.enable_lock_timer_autoly && *THOverlay::singleton().mTimeLock) {
             std::string time_text = std::format("{:.2f}", (float)g_lock_timer / 60.0f);
             auto sz = ImGui::CalcTextSize(time_text.c_str());
             p->AddRectFilled({ 64.0f, 0.0f }, { 220.0f, sz.y }, 0xFFFFFFFF);

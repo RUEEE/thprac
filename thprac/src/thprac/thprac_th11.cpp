@@ -805,6 +805,8 @@ namespace TH11 {
                 }
                 ImGui::SameLine();
                 HelpMarker(S(TH_DISABLE_MASTER_DESC));
+                ImGui::Checkbox(S(TH_ENABLE_LOCK_TIMER), &g_adv_igi_options.enable_lock_timer_autoly);
+
                 if (GameplayOpt(mOptCtx))
                     GameplaySet();
                 EndOptGroup();
@@ -1911,7 +1913,7 @@ namespace TH11 {
             g_lock_timer_flag = false;
         }
 
-        if (*THOverlay::singleton().mTimeLock && g_lock_timer > 0) {
+        if (g_adv_igi_options.enable_lock_timer_autoly && *THOverlay::singleton().mTimeLock) {
             std::string time_text = std::format("{:.2f}", (float)g_lock_timer / 60.0f);
             auto sz = ImGui::CalcTextSize(time_text.c_str());
             p->AddRectFilled({ 32.0f, 0.0f }, { 110.0f, sz.y }, 0xFFFFFFFF);
