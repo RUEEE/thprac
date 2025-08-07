@@ -9,6 +9,7 @@
 namespace THPrac {
 namespace TH15 {
     int g_lock_timer = 0;
+    bool g_lock_timer_flag = false;
 
     using std::pair;
     bool g_blind_view = false;
@@ -2136,6 +2137,11 @@ namespace TH15 {
 
     static void RenderLockTimer(ImDrawList* p)
     {
+        if (g_lock_timer_flag) {
+            g_lock_timer++;
+            g_lock_timer_flag = false;
+        }
+
         if (*THOverlay::singleton().mTimeLock && g_lock_timer > 0) {
             std::string time_text = std::format("{:.2f}", (float)g_lock_timer / 60.0f);
             auto sz = ImGui::CalcTextSize(time_text.c_str());
@@ -2571,7 +2577,7 @@ namespace TH15 {
     })
     EHOOK_DY(th15_lock_timer4, 0x4301E8,6, // decrease time (update)
     {
-        g_lock_timer++;
+        g_lock_timer_flag = true;
     })
     HOOKSET_ENDDEF()
     static __declspec(noinline) void THGuiCreate()

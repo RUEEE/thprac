@@ -8,6 +8,7 @@ namespace TH10 {
     bool g_mouse_move_hint = false;
     bool g_pl_speed_keep = false;
     int g_lock_timer = 0;
+    bool g_lock_timer_flag = false;
 
     int g_rep_page = 0;
     const char chars_supported[] = "!\"#$%&' ()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_abcdefghijklmnopqrstuvwxyz{|}~";
@@ -2478,6 +2479,11 @@ namespace TH10 {
 
     void RenderLockTimer(ImDrawList* p)
     {
+        if (g_lock_timer_flag) {
+            g_lock_timer++;
+            g_lock_timer_flag = false;
+        }
+
         if (*THOverlay::singleton().mTimeLock && g_lock_timer > 0) {
             std::string time_text = std::format("{:.2f}", (float)g_lock_timer / 60.0f);
             auto sz = ImGui::CalcTextSize(time_text.c_str());
@@ -2841,12 +2847,12 @@ namespace TH10 {
     })
     EHOOK_DY(th10_lock_timer4, 0x4128B6,6, // decrease time (update)
     {
-        g_lock_timer++;
+        g_lock_timer_flag = true;
     })
-    EHOOK_DY(th10_lock_timer5, 0x40E1B6,6, // decrease boss HP (recover)
-    {
-        g_lock_timer--;
-    })
+    //EHOOK_DY(th10_lock_timer5, 0x40E1B6,6, // decrease boss HP (recover)
+    //{
+    //    g_lock_timer--;
+    //})
     HOOKSET_ENDDEF()
 
         

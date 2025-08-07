@@ -28,6 +28,7 @@ namespace TH18 {
     };
 
     int g_lock_timer = 0;
+    bool g_lock_timer_flag = false;
 
     enum addrs {
         GAME_THREAD_PTR = 0x4cf2e4,
@@ -3038,6 +3039,11 @@ namespace TH18 {
 
     static void RenderLockTimer(ImDrawList* p)
     {
+        if (g_lock_timer_flag) {
+            g_lock_timer++;
+            g_lock_timer_flag = false;
+        }
+
         if (*THOverlay::singleton().mTimeLock && g_lock_timer > 0) {
             std::string time_text = std::format("{:.2f}", (float)g_lock_timer / 60.0f);
             auto sz = ImGui::CalcTextSize(time_text.c_str());
@@ -3383,7 +3389,7 @@ namespace TH18 {
     })
     EHOOK_DY(th18_lock_timer4, 0x42EF1D,6, // decrease time (update)
     {
-        g_lock_timer++;
+        g_lock_timer_flag = true;
     })
     HOOKSET_ENDDEF()
 

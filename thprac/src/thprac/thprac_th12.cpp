@@ -6,6 +6,7 @@
 namespace THPrac {
 namespace TH12 {
     int g_lock_timer = 0;
+    bool g_lock_timer_flag = false;
 
     using std::pair;
     struct THPracParam {
@@ -1709,6 +1710,11 @@ namespace TH12 {
 
     static void RenderLockTimer(ImDrawList* p)
     {
+        if (g_lock_timer_flag) {
+            g_lock_timer++;
+            g_lock_timer_flag = false;
+        }
+
         if (*THOverlay::singleton().mTimeLock && g_lock_timer > 0) {
             std::string time_text = std::format("{:.2f}", (float)g_lock_timer / 60.0f);
             auto sz = ImGui::CalcTextSize(time_text.c_str());
@@ -1936,7 +1942,7 @@ namespace TH12 {
     })
     EHOOK_DY(th12_lock_timer4, 0x41A821,6, // decrease time (update)
     {
-        g_lock_timer++;
+        g_lock_timer_flag = true;
     })
     HOOKSET_ENDDEF()
 
