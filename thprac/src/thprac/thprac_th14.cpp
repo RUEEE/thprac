@@ -2847,18 +2847,23 @@ namespace TH14 {
                                 if (pTex)
                                 {
                                     ImVec2 sz = *(ImVec2*)(pTex + 0x60);
+                                    float angle = *(float*)(pTex + 0x50);
+
                                     sz.x *= 32.0f;
                                     sz.y *= 192.0f;
 
                                     ImVec2 pos2 = { pos.x, pos.y + 24.0f };
-                                    ImVec2 p1 { pos2.x - sz.y * 0.5f, pos2.y - sz.x * 0.5f };
-                                    ImVec2 p2 { pos2.x + sz.y * 0.5f, pos2.y - sz.x * 0.5f };
-                                    ImVec2 p3 { pos2.x + sz.y * 0.5f, pos2.y + sz.x * 0.5f };
-                                    ImVec2 p4 { pos2.x - sz.y * 0.5f, pos2.y + sz.x * 0.5f };
-                                    p1 = GetClientFromStage(p1);
-                                    p2 = GetClientFromStage(p2);
-                                    p3 = GetClientFromStage(p3);
-                                    p4 = GetClientFromStage(p4);
+                                    ImVec2 p1 {- sz.y * 0.5f, - sz.x * 0.5f };
+                                    ImVec2 p2 {+ sz.y * 0.5f, - sz.x * 0.5f };
+                                    ImVec2 p3 {+ sz.y * 0.5f, + sz.x * 0.5f };
+                                    ImVec2 p4 {- sz.y * 0.5f, + sz.x * 0.5f };
+
+                                    ImVec2 A { cosf(angle), sinf(angle) };
+                                    p1 = GetClientFromStage(Add(Multiply(p1, A), pos2));
+                                    p2 = GetClientFromStage(Add(Multiply(p2, A), pos2));
+                                    p3 = GetClientFromStage(Add(Multiply(p3, A), pos2));
+                                    p4 = GetClientFromStage(Add(Multiply(p4, A), pos2));
+
                                     p->AddQuad(p1, p2, p3, p4, 0xFF00FF00);
                                     p->AddQuadFilled(p1, p2, p3, p4, 0x44FF00FF);
 
