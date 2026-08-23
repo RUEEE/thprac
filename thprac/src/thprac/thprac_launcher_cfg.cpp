@@ -2489,6 +2489,7 @@ private:
             mCfgEnableTH15_ShowShootingDownRate_autoly.Gui(S(THPRAC_INGAMEINFO_TH15_SHOW_SHOOTING_DOWN_RATE2));
 
             mCfgEnableTH16_UncapScore_autoly.Gui(S(THPRAC_INGAMEINFO_TH16_UNCAP_SCORE));
+            mCfgEnableTH17_UncapScore_autoly.Gui(S(THPRAC_INGAMEINFO_TH17_UNCAP_SCORE));
 
             mCfgTH18EnableCardActivatedCount.Gui(S(THPRAC_TH18_SHOW_CARD_ACTIVATED_CNT));
 
@@ -2736,6 +2737,7 @@ private:
     THCfgCheckbox mCfgEnableTH14_LaserRepRepair_autoly { "auto_th14_laser_rep_repair", false };
     THCfgCheckbox mCfgEnableTH15_ShowShootingDownRate_autoly { "auto_th15_show_rate", false };
     THCfgCheckbox mCfgEnableTH16_UncapScore_autoly { "auto_th16_uncap_score", false };
+    THCfgCheckbox mCfgEnableTH17_UncapScore_autoly { "auto_th17_uncap_score", false };
     THCfgCheckbox mCfgEnableMasterDisable_autoly { "auto_disable_master", false };
 
     THCfgCheckbox mCfgEnableLockTimer_autoly { "auto_lock_timer", false };

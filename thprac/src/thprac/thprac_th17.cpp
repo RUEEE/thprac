@@ -1077,6 +1077,30 @@ namespace TH17 {
         *y_range = (y_max - y_min2);
     });
 
+    constinit HookCtx scoreUncapHooks[] = {
+        { .addr = 0x41b1d3, .data = PatchCode("ffffffff") },
+        { .addr = 0x41b1d8, .data = PatchCode("ffffffff") },
+        { .addr = 0x4212a9, .data = PatchCode("ffffffff") },
+        { .addr = 0x4212ae, .data = PatchCode("ffffffff") },
+        { .addr = 0x432160, .data = PatchCode("ffffffff") },
+        { .addr = 0x432166, .data = PatchCode("ffffffff") },
+        { .addr = 0x4323b2, .data = PatchCode("ffffffff") },
+        { .addr = 0x4323b8, .data = PatchCode("ffffffff") },
+        { .addr = 0x4324e0, .data = PatchCode("ffffffff") },
+        { .addr = 0x4324e5, .data = PatchCode("ffffffff") },
+        { .addr = 0x433c5e, .data = PatchCode("ffffffff") },
+        { .addr = 0x433c75, .data = PatchCode("ffffffff") },
+        { .addr = 0x433d50, .data = PatchCode("ffffffff") },
+        { .addr = 0x433d60, .data = PatchCode("ffffffff") },
+        { .addr = 0x433f6d, .data = PatchCode("ffffffff") },
+        { .addr = 0x433f73, .data = PatchCode("ffffffff") },
+        { .addr = 0x4343e1, .data = PatchCode("ffffffff") },
+        { .addr = 0x4343e7, .data = PatchCode("ffffffff") },
+        { .addr = 0x43454f, .data = PatchCode("ffffffff") },
+        { .addr = 0x434555, .data = PatchCode("ffffffff") },
+        { .addr = 0x44b261, .data = PatchCode("ffffffff") },
+        { .addr = 0x44b279, .data = PatchCode("ffffffff") },
+    };
 
     class THAdvOptWnd : public Gui::PPGuiWnd {
         SINGLETON(THAdvOptWnd)
@@ -1121,6 +1145,21 @@ namespace TH17 {
             th17_all_clear_bonus_2.Setup();
             th17_all_clear_bonus_3.Setup();
         }
+
+        void ScoreUncapInit()
+        {
+            for (size_t i = 0; i < elementsof(scoreUncapHooks); i++) {
+                scoreUncapHooks[i].Setup();
+            }
+        }
+
+        void ScoreUncapSet()
+        {
+
+            for (auto& hook : scoreUncapHooks)
+                hook.Toggle(g_adv_igi_options.th17_uncap_score);
+        }
+
         void GameplaySet()
         {
             th17_all_clear_bonus_1.Toggle(mOptCtx.all_clear_bonus);
@@ -1144,6 +1183,8 @@ namespace TH17 {
             FpsInit();
             GameplayInit();
             MasterDisableInit();
+            ScoreUncapInit();
+            ScoreUncapSet();
             th17_goast_disable.Setup();
             th17_bossmovedown.Setup();
         }
@@ -1270,6 +1311,10 @@ namespace TH17 {
 
                 if (ImGui::Checkbox(S(TH17_NO_GOAST), &g_th17_goast_disable))
                     th17_goast_disable.Toggle(g_th17_goast_disable);
+
+                if (ImGui::Checkbox(S(TH18_UNCAP), &g_adv_igi_options.th17_uncap_score)) {
+                    ScoreUncapSet();
+                }
 
                 ImGui::Checkbox(S(TH_ENABLE_LOCK_TIMER), &g_adv_igi_options.enable_lock_timer_autoly);
 

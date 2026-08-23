@@ -1023,9 +1023,9 @@
       "THPRAC_OTHER_LUCK_HSIFSA": [ "四季如春",  "Play HSIFS", "Play HSIFS"],
       "THPRAC_OTHER_LUCK_HSIFSB": [ "瞎几把躲",  "Play HSIFS", "Play HSIFS"],
       
-      "THPRAC_OTHER_LUCK_WBABC":  [ "打鬼形兽",  "Play WBABC", "Play WBABC"],
-      "THPRAC_OTHER_LUCK_WBABCA": [ "跳脱三界",  "Play WBABC", "Play WBABC"],
-      "THPRAC_OTHER_LUCK_WBABCB": [ "狼狈逃窜",  "Play WBABC", "Play WBABC"],
+      "THPRAC_OTHER_LUCK_WBaWC":  [ "打鬼形兽",  "Play WBaWC", "Play WBaWC"],
+      "THPRAC_OTHER_LUCK_WBaWCA": [ "跳脱三界",  "Play WBaWC", "Play WBaWC"],
+      "THPRAC_OTHER_LUCK_WBaWCB": [ "狼狈逃窜",  "Play WBaWC", "Play WBaWC"],
       
       "THPRAC_OTHER_LUCK_UM":     [ "打虹龙洞",  "Play UM",    "Play UM"],
       "THPRAC_OTHER_LUCK_UMA":    [ "零元购",  "Play UM",    "Play UM"],
@@ -1100,7 +1100,7 @@
         "THPRAC_OTHER_LUCK_DDC",   
         "THPRAC_OTHER_LUCK_LOLK",  
         "THPRAC_OTHER_LUCK_HSIFS", 
-        "THPRAC_OTHER_LUCK_WBABC", 
+        "THPRAC_OTHER_LUCK_WBaWC", 
         "THPRAC_OTHER_LUCK_UM",
         "THPRAC_OTHER_LUCK_FW"
       ],
@@ -1115,7 +1115,7 @@
         "THPRAC_OTHER_LUCK_DDCA",   
         "THPRAC_OTHER_LUCK_LOLKA",  
         "THPRAC_OTHER_LUCK_HSIFSA", 
-        "THPRAC_OTHER_LUCK_WBABCA", 
+        "THPRAC_OTHER_LUCK_WBaWCA", 
         "THPRAC_OTHER_LUCK_UMA", 
         "THPRAC_OTHER_LUCK_FWA" 
       ],
@@ -1130,7 +1130,7 @@
         "THPRAC_OTHER_LUCK_DDCB",   
         "THPRAC_OTHER_LUCK_LOLKB",  
         "THPRAC_OTHER_LUCK_HSIFSB", 
-        "THPRAC_OTHER_LUCK_WBABCB", 
+        "THPRAC_OTHER_LUCK_WBaWCB", 
         "THPRAC_OTHER_LUCK_UMB",
         "THPRAC_OTHER_LUCK_FWB"
       ],
@@ -1439,6 +1439,7 @@
 	  "THPRAC_INGAMEINFO_TH16_CRASH_BUGFIX":["天空璋尝试修复消弹崩溃bug","HSiFS try fix season release crash bug","HSiFS try fix season release crash bug"],
 	  "THPRAC_INGAMEINFO_TH16_CRASH_BUGFIX_DESC":["不确定能不能用以及rep支持情况...","not sure about if it able to use or replay support","not sure about if it able to use or replay support"],
 	  "THPRAC_INGAMEINFO_TH16_UNCAP_SCORE":["天空璋取消分数上限","HSiFS uncap score","HSiFS uncap score"],
+	  "THPRAC_INGAMEINFO_TH17_UNCAP_SCORE":["鬼形兽取消分数上限","WBaWC uncap score","WBaWC uncap score"],
 	  
 	  "THPRAC_TH20_LV_LOCK": [ "锦上京miss/bomb后不掉石头等级", "FW no lv drop after miss/bomb", "FW no lv drop after miss/bomb" ],
 	  
@@ -4455,6 +4456,15 @@
         "TH_P4",
         "TH_P5",
 		"TH_RAGE"
+      ],
+      "TH08_SPELL_PHASE_IMPERISHABLE_SHOOTING": [
+        "TH185_WAVE_1",
+        "TH185_WAVE_2",
+        "TH185_WAVE_3",
+        "TH185_WAVE_4",
+        "TH185_WAVE_5",
+        "TH185_WAVE_6",
+        "TH_FINALE"
       ]
     }
   },
@@ -6072,6 +6082,8 @@
     "namespace": "TH12",
 
     "glossary": {
+      "TH12_CUSTOM_DROP": [ "滴弹自定义", "custom drop", "custom drop" ],
+      "TH12_CUSTOM_FLAME": [ "炎弹自定义", "custom flame", "custom flame" ],
       "TH_P5_LOCK": [ "锁P5", "P5 lock", "P5 lock" ],
       "TH12_UFO_SIDE": [ "碎片方向", "UFO Side", "ベントラー方向" ],
       "TH12_VENTRA_1": [ "飞碟1", "Ventra 1", "ベントラー1" ],

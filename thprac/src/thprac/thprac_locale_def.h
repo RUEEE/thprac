@@ -207,6 +207,8 @@ enum th_glossary_t {
     TH128_START_C,
     TH128_START_EX,
     TH128_TITLE,
+    TH12_CUSTOM_DROP,
+    TH12_CUSTOM_FLAME,
     TH12_TITLE,
     TH12_UFO_SIDE,
     TH12_VENTRA_1,
@@ -1126,6 +1128,7 @@ enum th_glossary_t {
     THPRAC_INGAMEINFO_TH16_CRASH_BUGFIX,
     THPRAC_INGAMEINFO_TH16_CRASH_BUGFIX_DESC,
     THPRAC_INGAMEINFO_TH16_UNCAP_SCORE,
+    THPRAC_INGAMEINFO_TH17_UNCAP_SCORE,
     THPRAC_INIT_WINDOW_POS,
     THPRAC_INIT_WINDOW_POS_DESC,
     THPRAC_KB,
@@ -1342,9 +1345,9 @@ enum th_glossary_t {
     THPRAC_OTHER_LUCK_VD,
     THPRAC_OTHER_LUCK_VDA,
     THPRAC_OTHER_LUCK_VDB,
-    THPRAC_OTHER_LUCK_WBABC,
-    THPRAC_OTHER_LUCK_WBABCA,
-    THPRAC_OTHER_LUCK_WBABCB,
+    THPRAC_OTHER_LUCK_WBaWC,
+    THPRAC_OTHER_LUCK_WBaWCA,
+    THPRAC_OTHER_LUCK_WBaWCB,
     THPRAC_OTHER_NAME,
     THPRAC_OTHER_TODAY,
     THPRAC_OVERWRTITE_DATA,
@@ -1882,7 +1885,7 @@ enum th_glossary_t {
     TH_WARP,
 };
 
-extern const char* th_glossary_str[3][1871];
+extern const char* th_glossary_str[3][1874];
 
 extern const th_glossary_t TH_TYPE_SELECT[13];
 
@@ -2363,6 +2366,8 @@ namespace TH08 {
     extern const th_glossary_t TH08_STAGE_SELECT[11];
 
     extern const th_glossary_t TH08_SPELL_5PHASE[7];
+
+    extern const th_glossary_t TH08_SPELL_PHASE_IMPERISHABLE_SHOOTING[8];
 
 }
 
@@ -3659,7 +3664,7 @@ namespace TH20 {
 
 }
 
-extern const wchar_t __thprac_loc_range_zh[3581];
+extern const wchar_t __thprac_loc_range_zh[3583];
 
 extern const wchar_t __thprac_loc_range_en[81];
 

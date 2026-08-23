@@ -54,6 +54,7 @@ namespace THPrac {
         bool th15_showShootingDownRate = false;
         bool th16_uncap_score = false;
         bool th16_fix_crash = false;
+        bool th17_uncap_score = false;
         bool show_keyboard_monitor = false;
         bool th10_ud_Replay = false;
         bool th12_chromatic_ufo = false;

@@ -63,6 +63,9 @@ namespace TH12 {
         int32_t ventra_2;
         int32_t ventra_3;
 
+        int32_t sp_phase;
+        float phase1, phase2, phase3, phase4;
+
         std::vector<PlayerDamageSource> reimuADmgSrcs[5];
         bool dlg;
 
@@ -96,6 +99,15 @@ namespace TH12 {
             GetJsonValue(ventra_1);
             GetJsonValue(ventra_2);
             GetJsonValue(ventra_3);
+
+            GetJsonValue(sp_phase);
+            if (sp_phase)
+            {
+                GetJsonValue(phase1);
+                GetJsonValue(phase2);
+                GetJsonValue(phase3);
+                GetJsonValue(phase4);
+            }
 
            // deserializing damage source data (for ReimuA bomb desync fix)
             GetJsonVectorArray(reimuADmgSrcs, {
@@ -168,6 +180,14 @@ namespace TH12 {
                     }
                 }
 
+                AddJsonValue(sp_phase);
+                if (sp_phase)
+                {
+                    AddJsonValue(phase1);
+                    AddJsonValue(phase2);
+                    AddJsonValue(phase3);
+                    AddJsonValue(phase4);
+                }
                 ReturnJson();
             }
         }
@@ -225,6 +245,12 @@ namespace TH12 {
                 thPracParam.value = *mValue;
                 thPracParam.graze = *mGraze;
                 thPracParam.ufo_side = *mUfoSide;
+
+                thPracParam.sp_phase = *mSpPhaseA | (((int)*mSpPhaseB) << 1);
+                thPracParam.phase1 = *mSpPhase1;
+                thPracParam.phase2 = *mSpPhase2;
+                thPracParam.phase3 = *mSpPhase3;
+                thPracParam.phase4 = *mSpPhase4;
 
                 if (*mVentra1) {
                     thPracParam.ventra_1 = *mVentra1;
@@ -308,6 +334,22 @@ namespace TH12 {
                     SectionWidget();
                     mPhase(TH_PHASE, SpellPhase());
                 }
+
+                auto section = CalcSection();
+                if (section == TH12_ST6_BOSS2){
+                    mSpPhaseA();
+                    ImGui::SameLine();
+                    mSpPhaseB();
+                    if (*mSpPhaseA) {
+                        mSpPhase1("%1.3f");
+                        mSpPhase2("%1.3f");
+                    }
+                    if (*mSpPhaseB) {
+                        mSpPhase3("%1.3f");
+                        mSpPhase4("%1.3f");
+                    }
+                }
+
 
                 mLife();
                 mLifeFragment();
@@ -435,6 +477,13 @@ namespace TH12 {
         Gui::GuiSlider<int, ImGuiDataType_S32> mPower { TH_POWER, 0, 400 };
         Gui::GuiDrag<int, ImGuiDataType_S32> mValue { TH_VALUE, 0, 999990, 10, 100000 };
         Gui::GuiDrag<int, ImGuiDataType_S32> mGraze { TH_GRAZE, 0, 999999, 1, 100000 };
+
+        Gui::GuiCheckBox mSpPhaseA { "custom drop" };
+        Gui::GuiSlider<float, ImGuiDataType_Float> mSpPhase1 { "phase1", -3.1415926f, 3.1415926f, 0.001f, 1.0f };
+        Gui::GuiSlider<float, ImGuiDataType_Float> mSpPhase2 { "delta1", -3.1415926f, 3.1415926f, 0.001f, 1.0f };
+        Gui::GuiCheckBox mSpPhaseB { "custom flame" };
+        Gui::GuiSlider<float, ImGuiDataType_Float> mSpPhase3 { "phase2", -3.1415926f, 3.1415926f, 0.001f, 1.0f };
+        Gui::GuiSlider<float, ImGuiDataType_Float> mSpPhase4 { "delta2", -3.1415926f, 3.1415926f, 0.001f, 1.0f };
 
         Gui::GuiNavFocus mNavFocus { TH_STAGE, TH_MODE, TH_WARP,
             TH_MID_STAGE, TH_END_STAGE, TH_NONSPELL, TH_SPELL, TH_PHASE, TH_CHAPTER,
@@ -1487,6 +1536,30 @@ namespace TH12 {
                 ECLJumpEx(ecl, 0x1a3c0, 0x1a508, 59);
             break;
         case THPrac::TH12::TH12_ST6_BOSS2:
+            if (thPracParam.sp_phase)
+            {
+                auto WrapAngle = [](float a) -> float {
+                    while (a > 3.1415926f)
+                        a -= 2 * 3.1415926f;
+                    while (a < -3.1415926f)
+                        a += 2 * 3.1415926f;
+                    return a;
+                };
+                if (thPracParam.sp_phase & 1) {
+                    ecl << pair { 0xA958 + 0x8, (int16_t)0 };
+                    ecl << pair { 0xA958 + 0x10, thPracParam.phase1 };
+
+                    ecl << pair { 0xADE0 + 0x8, (int16_t)0 };
+                    ecl << pair { 0xADE0 + 0x10, WrapAngle(thPracParam.phase1 + thPracParam.phase2) };
+                }
+                if (thPracParam.sp_phase & 2) {
+                    ecl << pair { 0xA018 + 0x8, (int16_t)0 };
+                    ecl << pair { 0xA018 + 0x10, thPracParam.phase3 };
+
+                    ecl << pair { 0xA4D0 + 0x8, (int16_t)0 };
+                    ecl << pair { 0xA4D0 + 0x10, WrapAngle(thPracParam.phase3 + thPracParam.phase4) };
+                }
+            }
             ECLJumpEx(ecl, 0x1a3c0, 0x1a508, 59);
             ecl << pair{0x968, 0x898};
             ecl << pair{0xb10, 60};

@@ -7,7 +7,7 @@
 
 namespace THPrac {
 
-const char* th_glossary_str[3][1871] {
+const char* th_glossary_str[3][1874] {
     {
         "",
         "啤酒",
@@ -207,6 +207,8 @@ const char* th_glossary_str[3][1871] {
         "C (春之小径)",
         "Extra (夜樱怪道)",
         "TH12.8 妖精大战争　～ 东方三月精",
+        "滴弹自定义",
+        "炎弹自定义",
         "TH12 东方星莲船　～ Undefined Fantastic Object.",
         "碎片方向",
         "飞碟1",
@@ -1126,6 +1128,7 @@ const char* th_glossary_str[3][1871] {
         "天空璋尝试修复消弹崩溃bug",
         "不确定能不能用以及rep支持情况...",
         "天空璋取消分数上限",
+        "鬼形兽取消分数上限",
         "初始化窗口位置",
         "如果遇到游戏启动后没窗口可尝试开启此选项",
         "按键显示设置",
@@ -2080,6 +2083,8 @@ const char* th_glossary_str[3][1871] {
         "C (Spring Path)",
         "Extra \n(Mysterious Night Cherry Blossom Path)",
         "TH12.8 Great Fairy Wars",
+        "custom drop",
+        "custom flame",
         "TH12 Undefined Fantastic Object",
         "UFO Side",
         "Ventra 1",
@@ -2999,6 +3004,7 @@ const char* th_glossary_str[3][1871] {
         "HSiFS try fix season release crash bug",
         "not sure about if it able to use or replay support",
         "HSiFS uncap score",
+        "WBaWC uncap score",
         "init window pos",
         "try this option when game is invisible after opened",
         "key monitor setting",
@@ -3215,9 +3221,9 @@ const char* th_glossary_str[3][1871] {
         "Play VD",
         "Play VD",
         "Play VD",
-        "Play WBABC",
-        "Play WBABC",
-        "Play WBABC",
+        "Play WBaWC",
+        "Play WBaWC",
+        "Play WBaWC",
         "name",
         "%d-%d-%d",
         "Overwrite",
@@ -3953,6 +3959,8 @@ const char* th_glossary_str[3][1871] {
         "C (春の小径)",
         "Extra (夜桜怪道)",
         "TH12.8 妖精大戦争　～ 東方三月精",
+        "custom drop",
+        "custom flame",
         "TH12 東方星蓮船　～ Undefined Fantastic Object.",
         "ベントラー方向",
         "ベントラー1",
@@ -4872,6 +4880,7 @@ const char* th_glossary_str[3][1871] {
         "HSiFS try fix season release crash bug",
         "not sure about if it able to use or replay support",
         "HSiFS uncap score",
+        "WBaWC uncap score",
         "init window pos",
         "try this option when game is invisible after opened",
         "key monitor setting",
@@ -5088,9 +5097,9 @@ const char* th_glossary_str[3][1871] {
         "Play VD",
         "Play VD",
         "Play VD",
-        "Play WBABC",
-        "Play WBABC",
-        "Play WBABC",
+        "Play WBaWC",
+        "Play WBaWC",
+        "Play WBaWC",
         "name",
         "%d-%d-%d",
         "上書き",
@@ -5664,7 +5673,7 @@ const th_glossary_t LUCK_DESC_1[14] {
     THPRAC_OTHER_LUCK_DDC,
     THPRAC_OTHER_LUCK_LOLK,
     THPRAC_OTHER_LUCK_HSIFS,
-    THPRAC_OTHER_LUCK_WBABC,
+    THPRAC_OTHER_LUCK_WBaWC,
     THPRAC_OTHER_LUCK_UM,
     THPRAC_OTHER_LUCK_FW,
 };
@@ -5680,7 +5689,7 @@ const th_glossary_t LUCK_DESC_1A[14] {
     THPRAC_OTHER_LUCK_DDCA,
     THPRAC_OTHER_LUCK_LOLKA,
     THPRAC_OTHER_LUCK_HSIFSA,
-    THPRAC_OTHER_LUCK_WBABCA,
+    THPRAC_OTHER_LUCK_WBaWCA,
     THPRAC_OTHER_LUCK_UMA,
     THPRAC_OTHER_LUCK_FWA,
 };
@@ -5696,7 +5705,7 @@ const th_glossary_t LUCK_DESC_1B[14] {
     THPRAC_OTHER_LUCK_DDCB,
     THPRAC_OTHER_LUCK_LOLKB,
     THPRAC_OTHER_LUCK_HSIFSB,
-    THPRAC_OTHER_LUCK_WBABCB,
+    THPRAC_OTHER_LUCK_WBaWCB,
     THPRAC_OTHER_LUCK_UMB,
     THPRAC_OTHER_LUCK_FWB,
 };
@@ -11563,6 +11572,16 @@ namespace TH08 {
         TH_P4,
         TH_P5,
         TH_RAGE,
+    };
+
+    const th_glossary_t TH08_SPELL_PHASE_IMPERISHABLE_SHOOTING[8] {
+        TH185_WAVE_1,
+        TH185_WAVE_2,
+        TH185_WAVE_3,
+        TH185_WAVE_4,
+        TH185_WAVE_5,
+        TH185_WAVE_6,
+        TH_FINALE,
     };
 
 }
@@ -28478,7 +28497,7 @@ namespace TH20 {
 
 }
 
-const wchar_t __thprac_loc_range_zh[3581] {
+const wchar_t __thprac_loc_range_zh[3583] {
     0x0020, 0x00FF,
     0x394, 0x394,
     0x2014, 0x2014,
@@ -29469,6 +29488,7 @@ const wchar_t __thprac_loc_range_zh[3581] {
     0x6ed1, 0x6ed1,
     0x6ee1, 0x6ee1,
     0x6ee5, 0x6ee5,
+    0x6ef4, 0x6ef4,
     0x6f02, 0x6f02,
     0x6f0f, 0x6f0f,
     0x6f14, 0x6f14,

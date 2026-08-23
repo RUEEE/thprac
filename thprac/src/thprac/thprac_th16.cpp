@@ -772,16 +772,8 @@ namespace TH16 {
             pCtx->Eip = 0x42e245;
         }
     });
-    static constinit HookCtx scoreUncapHooks[] = {
-        { .addr = 0x482A13, .data = PatchCode("ffffffff") },
-        { .addr = 0x408345, .data = PatchCode("ffffffff") },
-        { .addr = 0x43E125, .data = PatchCode("ffffffff") },
-        { .addr = 0x41822E, .data = PatchCode("ffffffff") },
-        { .addr = 0x4918A8, .data = PatchCode("ffffffff") },
-        { .addr = 0x48CC98, .data = PatchCode("ffffffff") },
-        { .addr = 0x4181FC, .data = PatchCode("ffffffff") },
-        { .addr = 0x43E12B, .data = PatchCode("ffffffff") },
-    };
+    constinit HookCtx scoreUncapHook = { .addr = 0x43E124, .data = PatchCode("81FAFFFFFFFFB8FFFFFFFF") };
+
     EHOOK_ST(th16_all_clear_bonus_3, 0x42e39b, 7, {
         *(int32_t*)(GetMemAddr(0x4a6dcc, 0x170)) = *(int32_t*)(0x4a57b0);
         if (GetMemContent(0x4a5bec) & 0x10) {
@@ -940,15 +932,11 @@ namespace TH16 {
         }
         void ScoreUncapInit()
         {
-            for (size_t i = 0; i < elementsof(scoreUncapHooks); i++) {
-                scoreUncapHooks[i].Setup();
-            }
+            scoreUncapHook.Setup();
         }
         void ScoreUncapSet()
         {
-            for (auto& hook : scoreUncapHooks) {
-                hook.Toggle(g_adv_igi_options.th16_uncap_score);
-            }
+            scoreUncapHook.Toggle(g_adv_igi_options.th16_uncap_score);
         }
 
         THAdvOptWnd() noexcept
@@ -1044,7 +1032,6 @@ namespace TH16 {
                 if (ImGui::DragFloat(S(TH_BOSS_FORCE_MOVE_DOWN_RANGE), &g_bossMoveDownRange, 0.002f, 0.0f, 1.0f))
                     g_bossMoveDownRange = std::clamp(g_bossMoveDownRange, 0.0f, 1.0f);
 
-                
                 if (ImGui::Checkbox(S(TH18_UNCAP), &g_adv_igi_options.th16_uncap_score)) {
                     ScoreUncapSet();
                 }
