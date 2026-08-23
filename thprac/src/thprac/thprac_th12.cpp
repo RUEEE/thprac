@@ -478,10 +478,10 @@ namespace TH12 {
         Gui::GuiDrag<int, ImGuiDataType_S32> mValue { TH_VALUE, 0, 999990, 10, 100000 };
         Gui::GuiDrag<int, ImGuiDataType_S32> mGraze { TH_GRAZE, 0, 999999, 1, 100000 };
 
-        Gui::GuiCheckBox mSpPhaseA { "custom drop" };
+        Gui::GuiCheckBox mSpPhaseA { TH12_CUSTOM_DROP };
         Gui::GuiSlider<float, ImGuiDataType_Float> mSpPhase1 { "phase1", -3.1415926f, 3.1415926f, 0.001f, 1.0f };
         Gui::GuiSlider<float, ImGuiDataType_Float> mSpPhase2 { "delta1", -3.1415926f, 3.1415926f, 0.001f, 1.0f };
-        Gui::GuiCheckBox mSpPhaseB { "custom flame" };
+        Gui::GuiCheckBox mSpPhaseB { TH12_CUSTOM_FLAME };
         Gui::GuiSlider<float, ImGuiDataType_Float> mSpPhase3 { "phase2", -3.1415926f, 3.1415926f, 0.001f, 1.0f };
         Gui::GuiSlider<float, ImGuiDataType_Float> mSpPhase4 { "delta2", -3.1415926f, 3.1415926f, 0.001f, 1.0f };
 
