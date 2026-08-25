@@ -2347,6 +2347,7 @@ private:
             mInitWindowPos.Gui(S(THPRAC_INIT_WINDOW_POS), S(THPRAC_INIT_WINDOW_POS_DESC));
             mDisableMaximizeBtn.Gui(S(THPRAC_DISABLE_MAXIMIZE_BTN));
             mDisableF10_11_13.Gui(S(THPRAC_DISABLE_F10_11_13), S(THPRAC_DISABLE_F10_11_13_DESC));
+            mDisableAltEnter.Gui(S(THPRAC_DISABLE_ALT_ENTER));
             ImGui::Separator();
             mForceRenderCursor.Gui(S(THPRAC_FORCE_RENDER_CURSOR), S(THPRAC_FORCE_RENDER_CURSOR_DESC));
             if (mForceRenderCursor.Get()) {
@@ -2796,6 +2797,7 @@ private:
     THCfgCheckbox mDinputUseGetDeviceData { "use_get_device_data", false };
 
     THCfgCheckbox mDisableF10_11_13 { "disable_F10_11_13", false };
+    THCfgCheckbox mDisableAltEnter { "disable_alt_enter", false };
     THCfgCheckbox mUD_Replay_10 { "th10_ud_Replay", true };
     // THCfgCheckbox mDisableWinKey { "disable_win_key", false };
     THCfgCheckbox mSpeedupBGM { "fast_BGM_when_spdup", false };

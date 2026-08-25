@@ -83,9 +83,61 @@ void FastRetry(int thprac_mode)
 
 LRESULT CALLBACK GameExternWndProc([[maybe_unused]] HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
+    static bool dragging = false;
+    static POINT startMouse;
+    static RECT startRect;
+
     switch (uMsg) {
     default:
         break;
+
+    // rewrite window move to prevent game pause
+    case WM_NCLBUTTONDOWN: {
+        if (wParam == HTCAPTION) {
+            dragging = true;
+            SetCapture(hWnd);
+            GetCursorPos(&startMouse);
+            GetWindowRect(hWnd, &startRect);
+            return 1;
+        }
+    } break;
+    case WM_MOUSEMOVE:
+    case WM_NCMOUSEMOVE: 
+        if (dragging) {
+            POINT p;
+            GetCursorPos(&p);
+            SetWindowPos(hWnd, nullptr, startRect.left + p.x - startMouse.x, startRect.top + p.y - startMouse.y, 0, 0, SWP_NOSIZE | SWP_NOZORDER);
+            return 1;
+        }
+        break;
+    case WM_LBUTTONUP:
+    case WM_NCLBUTTONUP: 
+        if (dragging) {
+            ReleaseCapture();
+            dragging = false;
+            return 1;
+        }
+        break;
+    case WM_SIZE:
+        if (wParam == SIZE_MINIMIZED) {
+            ReleaseCapture();
+            dragging = false;
+        }
+    case WM_CAPTURECHANGED:
+        dragging = false;
+        break;
+
+    // disable alt pause
+    case WM_SYSCOMMAND:
+        if ((wParam & 0xfff0) == SC_KEYMENU)
+            return 1;
+    // disable alt+enter toggle fullscreen
+    case WM_SYSKEYDOWN:
+        if (g_input_opt.disable_alt_enter){
+            if (wParam == VK_RETURN) {
+                return 1;
+            }
+        }
     case WM_ACTIVATEAPP:
     case WM_ACTIVATE:
         ClearInputData(LOWORD(wParam) == WA_INACTIVE);
@@ -679,7 +731,7 @@ void InitHook(int ver,void* addr1, void* addr2)
         LauncherSettingGet("keyboard_SOCDv2", (int&)g_input_opt.g_socd_setting);
         LauncherSettingGet("keyboard_API", (int&)g_input_opt.g_keyboardAPI);
 
-        bool disable_f10 = false;
+        bool disable_f10 = false, disable_alt_enter = false;
         if (LauncherSettingGet("disable_F10_11_13", disable_f10) && disable_f10) {
             if (ver == 11 // 11
                 || ver == 12 // 12
@@ -692,6 +744,11 @@ void InitHook(int ver,void* addr1, void* addr2)
                 g_input_opt.disable_f10_11_13 = false;
             }
 
+        } else {
+            g_input_opt.disable_f10_11_13 = false;
+        }
+        if (LauncherSettingGet("disable_alt_enter", disable_alt_enter) && disable_alt_enter) {
+            g_input_opt.disable_alt_enter = true;
         } else {
             g_input_opt.disable_f10_11_13 = false;
         }

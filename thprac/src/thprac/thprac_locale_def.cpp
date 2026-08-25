@@ -7,7 +7,7 @@
 
 namespace THPrac {
 
-const char* th_glossary_str[3][1874] {
+const char* th_glossary_str[3][1875] {
     {
         "",
         "啤酒",
@@ -787,6 +787,7 @@ const char* th_glossary_str[3][1874] {
         "数据目录##modal",
         "全局目录",
         "本地目录",
+        "靳止alt+enter全屏切换",
         "在th11到th13靳用F10键",
         "该按键用于切换全屏",
         "禁用手柄",
@@ -2663,6 +2664,7 @@ const char* th_glossary_str[3][1874] {
         "Data directory##modal",
         "Global directory",
         "Local directory",
+        "disable alt+enter toggle full screen",
         "disable f10 for th11-13",
         "which is used for toggle fullscreen",
         "disable joystick",
@@ -4539,6 +4541,7 @@ const char* th_glossary_str[3][1874] {
         "データディレクトリ##modal",
         "グローバルディレクトリ",
         "ローカルディレクトリ ",
+        "disable alt+enter toggle full screen",
         "disable f10 for th11-13",
         "which is used for toggle fullscreen",
         "disable joystick",

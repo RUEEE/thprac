@@ -787,6 +787,7 @@ enum th_glossary_t {
     THPRAC_DIRECTORY_SETTING_MODAL,
     THPRAC_DIR_GLOBAL,
     THPRAC_DIR_LOCAL,
+    THPRAC_DISABLE_ALT_ENTER,
     THPRAC_DISABLE_F10_11_13,
     THPRAC_DISABLE_F10_11_13_DESC,
     THPRAC_DISABLE_JOY,
@@ -1885,7 +1886,7 @@ enum th_glossary_t {
     TH_WARP,
 };
 
-extern const char* th_glossary_str[3][1874];
+extern const char* th_glossary_str[3][1875];
 
 extern const th_glossary_t TH_TYPE_SELECT[13];
 

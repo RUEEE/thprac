@@ -243,6 +243,7 @@
  
     
 	"THPRAC_DISABLE_MAXIMIZE_BTN":["靳止最大化窗口按钮的全屏切换","disable maximizebox to toggle full screen","disable maximizebox to toggle full screen"],
+	"THPRAC_DISABLE_ALT_ENTER":["靳止alt+enter全屏切换","disable alt+enter toggle full screen","disable alt+enter toggle full screen"],
 	"THPRAC_INIT_WINDOW_POS":["初始化窗口位置","init window pos","init window pos"],
 	"THPRAC_INIT_WINDOW_POS_DESC":["如果遇到游戏启动后没窗口可尝试开启此选项","try this option when game is invisible after opened","try this option when game is invisible after opened"],
     "THPRAC_CHANGE_WINDOW_SZ_WHEN_OPEN":["修改启动时窗口的大小","change window size when open","change window size when open"],
