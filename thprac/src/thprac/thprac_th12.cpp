@@ -345,12 +345,12 @@ namespace TH12 {
                         mSpPhase1("%1.3f");
                         sprintf_s(ch, "%1.3f", *mSpPhase2 / 1.256637f);
                         mSpPhase2(ch);
-                        if (ImGui::Button("+1/6")){
+                        if (ImGui::Button("+1/6##A")){
                             *mSpPhase2 += 0.2094395f;
                             *mSpPhase2 = std::clamp(*mSpPhase2, -3.1415826f, 3.1415926f);
                         }
                         ImGui::SameLine();
-                        if (ImGui::Button("-1/6")) {
+                        if (ImGui::Button("-1/6##A")) {
                             *mSpPhase2 -= 0.2094395f;
                             *mSpPhase2 = std::clamp(*mSpPhase2, -3.1415826f, 3.1415926f);
                         }
@@ -359,12 +359,12 @@ namespace TH12 {
                         mSpPhase3("%1.3f");
                         sprintf_s(ch, "%1.3f", *mSpPhase4 / 1.256637f);
                         mSpPhase4(ch);
-                        if (ImGui::Button("+1/6")) {
+                        if (ImGui::Button("+1/6##B")) {
                             *mSpPhase4 += 0.2094395f;
                             *mSpPhase4 = std::clamp(*mSpPhase4, -3.1415826f, 3.1415926f);
                         }
                         ImGui::SameLine();
-                        if (ImGui::Button("-1/6")) {
+                        if (ImGui::Button("-1/6##B")) {
                             *mSpPhase4 -= 0.2094395f;
                             *mSpPhase4 = std::clamp(*mSpPhase4, -3.1415826f, 3.1415926f);
                         }
