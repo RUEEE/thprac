@@ -375,7 +375,7 @@ namespace TH06 {
     };
     bool thRestartFlag = false;
     bool threstartflag_normalgame = false;
-    
+    extern constinit HookCtx th06_sfx_fix;
 
     THPracParam thPracParam {};
 
@@ -424,6 +424,7 @@ namespace TH06 {
             mAutoBomb.SetTextOffsetRel(x_offset_1, x_offset_2);
             mElBgm.SetTextOffsetRel(x_offset_1, x_offset_2);
             mShowSpellCapture.SetTextOffsetRel(x_offset_1, x_offset_2);
+            mEnemyMuteki.SetTextOffsetRel(x_offset_1, x_offset_2);
         }
         virtual void OnContentUpdate() override
         {
@@ -435,6 +436,7 @@ namespace TH06 {
             mAutoBomb();
             mElBgm();
             mShowSpellCapture();
+            mEnemyMuteki();
         }
         virtual void OnPreUpdate() override
         {
@@ -502,6 +504,10 @@ namespace TH06 {
 
         Gui::GuiHotKey mElBgm { TH_EL_BGM, "F7", VK_F7 };
         Gui::GuiHotKey mShowSpellCapture { THPRAC_INGAMEINFO, "F8", VK_F8 };
+
+        HOTKEY_DEFINE(mEnemyMuteki, TH_ENEMY_MUTEKI, "U", 'U')
+        PATCH_HK(0x412893, "909090909090")
+        HOTKEY_ENDDEF();
     };
 
     class THGuiPrac : public Gui::GameGuiWnd {
@@ -710,7 +716,7 @@ namespace TH06 {
                             while (isspace(text[n]) && text[n+1] != 0)
                                 n++;
                             // trim
-                            if (text && sscanf_s(text + n, "(%d,%d),(%d,%d),(%d,%d),(%d,%d),(%d,%d),(%d,%d)", &xs[0], &ys[0], &xs[1], &ys[1], &xs[2], &ys[2], &xs[3], &ys[3], &xs[4], &ys[4], &xs[5], &ys[5])) {
+                            if (text && sscanf_s(text + n, "(%d,%d),(%d,%d),(%d,%d),(%d,%d),(%d,%d),(%d,%d)", &xs[0], &ys[0], &xs[1], &ys[1], &xs[2], &ys[2], &xs[3], &ys[3], &xs[4], &ys[4], &xs[5], &ys[5])==12) {
                                 *mBookX1 = xs[0], *mBookY1 = ys[0],
                                 *mBookX2 = xs[1], *mBookY2 = ys[1],
                                 *mBookX3 = xs[2], *mBookY3 = ys[2],
@@ -719,7 +725,6 @@ namespace TH06 {
                                 *mBookX6 = xs[5], *mBookY6 = ys[5];
                             }
                         }
-                       
                     }
                 }
             }else if (section == TH06_ST5_BOSS6) {
@@ -1284,8 +1289,10 @@ namespace TH06 {
                 break;
             case 3:
                 mRepStatus = true;
-                if (mParamStatus)
+                if (mParamStatus) {
                     memcpy(&thPracParam, &mRepParam, sizeof(THPracParam));
+                    th06_sfx_fix.Enable();
+                }
                 break;
             default:
                 break;

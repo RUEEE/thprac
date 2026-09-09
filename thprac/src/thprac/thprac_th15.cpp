@@ -538,6 +538,7 @@ namespace TH15 {
             mAutoBomb.SetTextOffsetRel(x_offset_1, x_offset_2);
             mElBgm.SetTextOffsetRel(x_offset_1, x_offset_2);
             mInGameInfo.SetTextOffsetRel(x_offset_1, x_offset_2);
+            mEnemyMuteki.SetTextOffsetRel(x_offset_1, x_offset_2);
         }
         virtual void OnContentUpdate() override
         {
@@ -549,6 +550,7 @@ namespace TH15 {
             mAutoBomb();
             mElBgm();
             mInGameInfo();
+            mEnemyMuteki();
         }
         virtual void OnPreUpdate() override
         {
@@ -593,6 +595,12 @@ namespace TH15 {
 
         Gui::GuiHotKey mElBgm { TH_EL_BGM, "F7", VK_F7 };
         Gui::GuiHotKey mInGameInfo { THPRAC_INGAMEINFO, "F8", VK_F8 };
+
+        
+        HOTKEY_DEFINE(mEnemyMuteki, TH_ENEMY_MUTEKI, "U", 'U')
+        PATCH_HK(0x424E06, "9090"),
+        PATCH_HK(0x424DFD, "9090")
+        HOTKEY_ENDDEF();
     };
 
     class TH15InGameInfo : public Gui::GameGuiWnd {

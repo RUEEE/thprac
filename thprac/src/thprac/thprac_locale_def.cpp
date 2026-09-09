@@ -7,7 +7,7 @@
 
 namespace THPrac {
 
-const char* th_glossary_str[3][1875] {
+const char* th_glossary_str[3][1882] {
     {
         "",
         "啤酒",
@@ -207,8 +207,14 @@ const char* th_glossary_str[3][1875] {
         "C (春之小径)",
         "Extra (夜樱怪道)",
         "TH12.8 妖精大战争　～ 东方三月精",
+        "复制相位到剪贴板",
         "滴弹自定义",
         "炎弹自定义",
+        "粘贴相位",
+        "查看紫云相位",
+        "强制第一波",
+        "强制第二波",
+        "正常",
         "TH12 东方星莲船　～ Undefined Fantastic Object.",
         "碎片方向",
         "飞碟1",
@@ -1728,6 +1734,7 @@ const char* th_glossary_str[3][1875] {
         "关底八符",
         "关底九符",
         "关底Boss",
+        "敌人无敌",
         "自定义练习",
         "增强程度",
         "五五开",
@@ -2084,8 +2091,14 @@ const char* th_glossary_str[3][1875] {
         "C (Spring Path)",
         "Extra \n(Mysterious Night Cherry Blossom Path)",
         "TH12.8 Great Fairy Wars",
+        "copy phase to clipboard",
         "custom drop",
         "custom flame",
+        "paste phase",
+        "show st6sp1 phase",
+        "force wave1",
+        "force wave2",
+        "normal",
         "TH12 Undefined Fantastic Object",
         "UFO Side",
         "Ventra 1",
@@ -3605,6 +3618,7 @@ const char* th_glossary_str[3][1875] {
         "Boss Spell 8",
         "Boss Spell 9",
         "End Boss",
+        "Enemy Invincible",
         "Custom",
         "enhancement degree",
         "half half",
@@ -3961,8 +3975,14 @@ const char* th_glossary_str[3][1875] {
         "C (春の小径)",
         "Extra (夜桜怪道)",
         "TH12.8 妖精大戦争　～ 東方三月精",
+        "copy phase to clipboard",
         "custom drop",
         "custom flame",
+        "paste phase",
+        "show st6sp1 phase",
+        "force wave ",
+        "force wave2",
+        "normal",
         "TH12 東方星蓮船　～ Undefined Fantastic Object.",
         "ベントラー方向",
         "ベントラー1",
@@ -5482,6 +5502,7 @@ const char* th_glossary_str[3][1875] {
         "ボス スペル8",
         "ボス スペル9",
         "ボス",
+        "敵無敵",
         "カスタム",
         "enhancement degree",
         "half half",
@@ -16697,6 +16718,12 @@ namespace TH12 {
         TH12_VENTRA_RED,
         TH12_VENTRA_BLUE,
         TH12_VENTRA_GREEN,
+    };
+
+    const th_glossary_t TH12_ST5_SPELL4_PHASE[4] {
+        TH12_ST5_SPELL4_TYPE_NORMAL,
+        TH12_ST5_SPELL4_TYPE_FORCE_WAVE_1,
+        TH12_ST5_SPELL4_TYPE_FORCE_WAVE_2,
     };
 
     const th_glossary_t TH12_SPELL_PHASE4_LOCK[8] {

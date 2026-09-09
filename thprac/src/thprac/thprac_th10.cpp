@@ -486,6 +486,7 @@ namespace TH10 {
             mNoFaithLoss.SetTextOffsetRel(x_offset_1, x_offset_2);
             mElBgm.SetTextOffsetRel(x_offset_1, x_offset_2);
             mInGameInfo.SetTextOffsetRel(x_offset_1, x_offset_2);
+            mEnemyMuteki.SetTextOffsetRel(x_offset_1, x_offset_2);
         }
         virtual void OnContentUpdate() override
         {
@@ -497,6 +498,7 @@ namespace TH10 {
             mNoFaithLoss();
             mElBgm();
             mInGameInfo();
+            mEnemyMuteki();
         }
         virtual void OnPreUpdate() override
         {
@@ -562,6 +564,10 @@ namespace TH10 {
         HOTKEY_ENDDEF();
         Gui::GuiHotKey mElBgm { TH_EL_BGM, "F7", VK_F7 };
         Gui::GuiHotKey mInGameInfo { THPRAC_INGAMEINFO, "F8", VK_F8 };
+
+        HOTKEY_DEFINE(mEnemyMuteki, TH_ENEMY_MUTEKI, "U", 'U')
+        PATCH_HK(0x40E1B6, "909090909090")
+        HOTKEY_ENDDEF();
     };
 
     class TH10InGameInfo : public Gui::GameGuiWnd {

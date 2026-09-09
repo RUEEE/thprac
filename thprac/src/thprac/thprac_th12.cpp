@@ -8,6 +8,9 @@ namespace TH12 {
     int g_lock_timer = 0;
     bool g_lock_timer_flag = false;
 
+    float g_st6sp1_args[4];
+    bool g_st6sp1_testargs = false;
+
     bool g_show_bullet_hitbox = false;
     struct laser_hitbox_draw {
         ImVec2 posA;
@@ -319,6 +322,8 @@ namespace TH12 {
                 return TH_PHASE_INF_MODE;
             }else if (section == TH12_ST5_MID2) {
                 return TH_TIMEOUT_SETTING;
+            } else if (section == TH12_ST5_BOSS7) {
+                return TH12_ST5_SPELL4_PHASE;
             }
             return nullptr;
         }
@@ -343,7 +348,7 @@ namespace TH12 {
                     char ch[20];
                     if (*mSpPhaseA) {
                         mSpPhase1("%1.3f");
-                        sprintf_s(ch, "%1.3f", *mSpPhase2 / 1.256637f);
+                        sprintf_s(ch, "%1.3f (%1.3f)", *mSpPhase2, *mSpPhase2 / 1.256637f);
                         mSpPhase2(ch);
                         if (ImGui::Button("+1/6##A")){
                             *mSpPhase2 += 0.2094395f;
@@ -357,7 +362,7 @@ namespace TH12 {
                     }
                     if (*mSpPhaseB) {
                         mSpPhase3("%1.3f");
-                        sprintf_s(ch, "%1.3f", *mSpPhase4 / 1.256637f);
+                        sprintf_s(ch, "%1.3f (%1.3f)", *mSpPhase4, * mSpPhase4 / 1.256637f);
                         mSpPhase4(ch);
                         if (ImGui::Button("+1/6##B")) {
                             *mSpPhase4 += 0.2094395f;
@@ -367,6 +372,22 @@ namespace TH12 {
                         if (ImGui::Button("-1/6##B")) {
                             *mSpPhase4 -= 0.2094395f;
                             *mSpPhase4 = std::clamp(*mSpPhase4, -3.1415826f, 3.1415926f);
+                        }
+                    }
+                    if ((*mSpPhaseA || *mSpPhaseB) && ImGui::Button(S(TH12_PASTE_PHASE))) {
+                        auto text = ImGui::GetClipboardText();
+                        if (text) {
+                            int n = 0;
+                            while (isspace(text[n]) && text[n + 1] != 0)
+                                n++;
+                            // trim
+                            float a, b, c, d;
+                            if (text && sscanf_s(text + n, "(%f,%f,%f,%f)", &a,&b,&c,&d)==4) {
+                                *mSpPhase1 = a;
+                                *mSpPhase2 = b;
+                                *mSpPhase3 = c;
+                                *mSpPhase4 = d;
+                            }
                         }
                     }
                 }
@@ -615,6 +636,7 @@ namespace TH12 {
             mAutoBomb.SetTextOffsetRel(x_offset_1, x_offset_2);
             mElBgm.SetTextOffsetRel(x_offset_1, x_offset_2);
             mInGameInfo.SetTextOffsetRel(x_offset_1, x_offset_2);
+            mEnemyMuteki.SetTextOffsetRel(x_offset_1, x_offset_2);
         }
         virtual void OnContentUpdate() override
         {
@@ -626,6 +648,7 @@ namespace TH12 {
             mAutoBomb();
             mElBgm();
             mInGameInfo();
+            mEnemyMuteki();
         }
         virtual void OnPreUpdate() override
         {
@@ -669,6 +692,11 @@ namespace TH12 {
         HOTKEY_ENDDEF();
         Gui::GuiHotKey mElBgm { TH_EL_BGM, "F7", VK_F7 };
         Gui::GuiHotKey mInGameInfo { THPRAC_INGAMEINFO, "F8", VK_F8 };
+
+        HOTKEY_DEFINE(mEnemyMuteki, TH_ENEMY_MUTEKI, "U", 'U')
+        PATCH_HK(0x412084, "9090"),
+        PATCH_HK(0x412088, "9090")
+        HOTKEY_ENDDEF();
     };
 
     class TH12InGameInfo : public Gui::GameGuiWnd {
@@ -832,6 +860,34 @@ namespace TH12 {
         *(DWORD*)(pCtx->Esi + 0x00018F9C) = 0;
     });
 
+    EHOOK_ST(th12_st6sp1_arg, 0x41A06F, 4,
+    {
+            DWORD stage = GetMemContent(STAGE_NUM);
+            if (stage == 6)
+            {
+                float cur_val = *(float*)(pCtx->Esp + 0x4);
+                DWORD p_ecl = *(DWORD*)(pCtx->Esp + 0xC);
+                DWORD p_ecl_begin = GetMemContent(0x4b43dc, 0x64, 0xC);
+                switch (p_ecl - p_ecl_begin)
+                {
+                case 0xA958:
+                    g_st6sp1_args[0] = cur_val;
+                    break;
+                case 0xADE0:
+                    g_st6sp1_args[1] = cur_val;
+                    break;
+                case 0xA018:
+                    g_st6sp1_args[2] = cur_val;
+                    break;
+                case 0xA4D0:
+                    g_st6sp1_args[3] = cur_val;
+                    break;
+                default:
+                    break;
+                }
+            }
+    });
+
     float g_bossMoveDownRange = BOSS_MOVE_DOWN_RANGE_INIT;
     EHOOK_ST(th12_bossmovedown, 0x00417562, 5, {
         float* y_pos = (float*)(pCtx->Ebx + 0x15F8);
@@ -966,6 +1022,7 @@ namespace TH12 {
             FpsInit();
             GameplayInit();
             MasterDisableInit();
+            th12_st6sp1_arg.Setup();
             th12_bossmovedown.Setup();
             th12_laser_hit_test.Setup();
         }
@@ -1048,6 +1105,22 @@ namespace TH12 {
                 if (ImGui::Checkbox("show laser hitbox(only practice mode)", &g_show_bullet_hitbox))
                 {
                     th12_laser_hit_test.Toggle(g_show_bullet_hitbox);
+                }
+
+                if (ImGui::Checkbox(S(TH12_SHOW_ST6SP1_VALUE), &g_st6sp1_testargs)) {
+                    th12_st6sp1_arg.Toggle(g_st6sp1_testargs);
+                }
+                if (g_st6sp1_testargs)
+                {
+                    ImGui::Text("%3.2f %3.2f %3.2f %3.2f", 
+                        g_st6sp1_args[0], g_st6sp1_args[1] - g_st6sp1_args[0], 
+                        g_st6sp1_args[2], g_st6sp1_args[3] - g_st6sp1_args[2]);
+                    if (ImGui::Button(S(TH12_COPY_PHASE))) {
+                        ImGui::SetClipboardText(
+                            std::format("({},{},{},{})", 
+                                g_st6sp1_args[0], g_st6sp1_args[1] - g_st6sp1_args[0],
+                                g_st6sp1_args[2], g_st6sp1_args[3] - g_st6sp1_args[2]).c_str());
+                    }
                 }
 
                 if (GameplayOpt(mOptCtx))
@@ -1546,6 +1619,18 @@ namespace TH12 {
             ecl << pair{0x0bf0, (int8_t)0x34};
             ECLJumpEx(ecl, 0x412c, 0x4198, 0);
             ecl << pair{0x4078, (int16_t)0x0} << pair{0x41bc, (int16_t)0x0};
+            switch (thPracParam.phase)
+            {
+            default:
+            case 0:
+                break;
+            case 1:
+                ECLJumpEx(ecl, 0x9B14, 0x9900, 120);
+                break;
+            case 2:
+                ECLJumpEx(ecl, 0x9900, 0x9B14, 120);
+                break;
+            }
             break;
         case THPrac::TH12::TH12_ST6_MID1:
             ECLJumpEx(ecl, 0x1a3c0, 0x1a4a0, 60);

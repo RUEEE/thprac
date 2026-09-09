@@ -1612,6 +1612,7 @@ namespace TH20 {
             mAutoBomb.SetTextOffsetRel(x_offset_1, x_offset_2);
             mElBgm.SetTextOffsetRel(x_offset_1, x_offset_2);
             mInGameInfo.SetTextOffsetRel(x_offset_1, x_offset_2);
+            mEnemyMuteki.SetTextOffsetRel(x_offset_1, x_offset_2);
         }
         virtual void OnContentUpdate() override
         {
@@ -1625,6 +1626,7 @@ namespace TH20 {
             mTimeLock();
             mElBgm();
             mInGameInfo();
+            mEnemyMuteki();
         }
         virtual void OnPreUpdate() override
         {
@@ -1704,6 +1706,12 @@ namespace TH20 {
         Gui::GuiHotKey mInfLives { TH_INFLIVES2, "F2", VK_F2 };
         Gui::GuiHotKey mElBgm { TH_EL_BGM, "F9", VK_F9 };
         Gui::GuiHotKey mInGameInfo { THPRAC_INGAMEINFO, "F10", VK_F10 };
+
+        HOTKEY_DEFINE(mEnemyMuteki, TH_ENEMY_MUTEKI, "U", 'U')
+        PATCH_HK(0xA3FA9, "909090"),
+        PATCH_HK(0xA3FE4, "909090")
+        HOTKEY_ENDDEF();
+
     };
 
     // TODO(?)

@@ -1754,6 +1754,7 @@
       "TH_NA": [ "N/A", "N/A", "N/A" ],
       "TH_TIMELOCK": [ "锁时", "Time Lock", "残り時間減らない" ],
       "TH_MUTEKI": [ "无敌", "Invincible", "無敵" ],
+      "TH_ENEMY_MUTEKI": [ "敌人无敌", "Enemy Invincible", "敵無敵" ],
       "TH_INFSUBP": [ "无限季节槽", "inf subP", "inf subP" ],
       "TH_INFLIVES": [ "锁残", "Inf. Lives", "残機減らない" ],
       "TH_INFLIVES2": [ "锁残/不疮", "Inf. Lives/No Continue", "残機減らない/No Continue" ],
@@ -6083,6 +6084,14 @@
     "namespace": "TH12",
 
     "glossary": {
+	
+      "TH12_ST5_SPELL4_TYPE_NORMAL": [ "正常", "normal", "normal" ],
+      "TH12_ST5_SPELL4_TYPE_FORCE_WAVE_1": [ "强制第一波", "force wave1", "force wave " ],
+      "TH12_ST5_SPELL4_TYPE_FORCE_WAVE_2": [ "强制第二波", "force wave2", "force wave2" ],
+	  "TH12_SHOW_ST6SP1_VALUE": [ "查看紫云相位", "show st6sp1 phase", "show st6sp1 phase" ],
+      "TH12_COPY_PHASE": [ "复制相位到剪贴板", "copy phase to clipboard", "copy phase to clipboard" ],
+      "TH12_PASTE_PHASE": [ "粘贴相位", "paste phase", "paste phase" ],
+	  
       "TH12_CUSTOM_DROP": [ "滴弹自定义", "custom drop", "custom drop" ],
       "TH12_CUSTOM_FLAME": [ "炎弹自定义", "custom flame", "custom flame" ],
       "TH_P5_LOCK": [ "锁P5", "P5 lock", "P5 lock" ],
@@ -6567,6 +6576,11 @@
         "TH12_VENTRA_RED",
         "TH12_VENTRA_BLUE",
         "TH12_VENTRA_GREEN"
+      ],
+	  "TH12_ST5_SPELL4_PHASE": [
+        "TH12_ST5_SPELL4_TYPE_NORMAL",
+        "TH12_ST5_SPELL4_TYPE_FORCE_WAVE_1",
+        "TH12_ST5_SPELL4_TYPE_FORCE_WAVE_2"
       ],
 	  "TH12_SPELL_PHASE4_LOCK": [
         "TH_P1",

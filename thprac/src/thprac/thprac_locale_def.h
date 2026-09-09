@@ -207,8 +207,14 @@ enum th_glossary_t {
     TH128_START_C,
     TH128_START_EX,
     TH128_TITLE,
+    TH12_COPY_PHASE,
     TH12_CUSTOM_DROP,
     TH12_CUSTOM_FLAME,
+    TH12_PASTE_PHASE,
+    TH12_SHOW_ST6SP1_VALUE,
+    TH12_ST5_SPELL4_TYPE_FORCE_WAVE_1,
+    TH12_ST5_SPELL4_TYPE_FORCE_WAVE_2,
+    TH12_ST5_SPELL4_TYPE_NORMAL,
     TH12_TITLE,
     TH12_UFO_SIDE,
     TH12_VENTRA_1,
@@ -1728,6 +1734,7 @@ enum th_glossary_t {
     TH_END_S8,
     TH_END_S9,
     TH_END_STAGE,
+    TH_ENEMY_MUTEKI,
     TH_ENHANCED,
     TH_ENHANCEMENT_VALUE,
     TH_EOSD_SAKUYA_DOLLS_HALF_HALF,
@@ -1886,7 +1893,7 @@ enum th_glossary_t {
     TH_WARP,
 };
 
-extern const char* th_glossary_str[3][1875];
+extern const char* th_glossary_str[3][1882];
 
 extern const th_glossary_t TH_TYPE_SELECT[13];
 
@@ -2758,6 +2765,8 @@ namespace TH12 {
     extern const th_sections_t th_sections_cbt[7][2][14];
 
     extern const th_glossary_t TH12_VENTRA_SELECT[5];
+
+    extern const th_glossary_t TH12_ST5_SPELL4_PHASE[4];
 
     extern const th_glossary_t TH12_SPELL_PHASE4_LOCK[8];
 
