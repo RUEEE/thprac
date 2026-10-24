@@ -1861,7 +1861,7 @@ public:
 
         return result;
     }
-    static DWORD WINAPI WaitAndApplyTHPrac(std::wstring& exePath)
+    static DWORD WINAPI WaitAndApplyTHPrac(THPrac::THGameInst& currentInst, std::wstring currentInstDir, std::wstring& exePath)
     {
         auto& gameGui = THGameGui::singleton();
         bool isOmni = exePath == L"" ? true : false;
@@ -1888,6 +1888,23 @@ public:
                                 FALSE,
                                 procEntry.th32ProcessID);
                             if (hProc) {
+                                if (currentInst.type == TYPE_NYASAMA && currentInst.useOILP) {
+                                    std::wstring path = currentInstDir + L"openinputlagpatch.dll";
+                                    if (CheckDLLFunction(path.c_str(), "oilp_set_game_fps")) {
+                                        auto oilpNameLength = (path.size() + 1) * sizeof(wchar_t);
+                                        auto pLoadLibrary = ::LoadLibraryW;
+                                        auto remoteStr = VirtualAllocEx(hProc, NULL, oilpNameLength, MEM_COMMIT | MEM_RESERVE, PAGE_EXECUTE_READWRITE);
+                                        if (!remoteStr)
+                                            return 0;
+                                        defer(VirtualFreeEx(hProc, remoteStr, 0, MEM_RELEASE));
+                                        WriteProcessMemory(hProc, remoteStr, path.data(), oilpNameLength, NULL);
+                                        auto t = CreateRemoteThread(hProc, NULL, 0, (LPTHREAD_START_ROUTINE)pLoadLibrary, remoteStr, 0, NULL);
+                                        if (t) {
+                                            WaitForSingleObject(t, INFINITE);
+                                            CloseHandle(t);
+                                        }
+                                    }
+                                }
                                 auto result = (WriteTHPracSig(hProc, base) && LocalApplyTHPrac(hProc));
                                 CloseHandle(hProc);
                                 return result ? 1 : 0;
@@ -2082,7 +2099,7 @@ public:
         }
 
         if ((currentCatagory == CAT_MAIN || currentCatagory == CAT_SPINOFF_STG) && currentInst.useTHPrac) {
-            return WaitAndApplyTHPrac(currentInstExePath);
+            return WaitAndApplyTHPrac(currentInst, currentInstDir, currentInstExePath);
         }
 
         return 1;
@@ -2363,6 +2380,7 @@ public:
         if (currentCatagory == CAT_MAIN || currentCatagory == CAT_SPINOFF_STG) {
             switch (currentInst.type) {
             case TYPE_ORIGINAL:
+            case TYPE_NYASAMA:
                 GameVpatchSelection(currentInst);
                 if (ImGui::Checkbox(S(THPRAC_GAMES_APPLY_THPRAC), &currentInst.useTHPrac)) {
                     WriteGameCfg();
@@ -2370,7 +2388,6 @@ public:
                 break;
             case TYPE_THCRAP:
             case TYPE_STEAM:
-            case TYPE_NYASAMA:
                 if (ImGui::Checkbox(S(THPRAC_GAMES_APPLY_THPRAC), &currentInst.useTHPrac)) {
                     WriteGameCfg();
                 }
