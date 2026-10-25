@@ -3274,15 +3274,19 @@ namespace TH14 {
     {
         g_lock_timer = 0;
     })
-    EHOOK_DY(th14_lock_timer2, 0x4286BA,4, // SetNextPattern case 514
+    EHOOK_DY(th14_lock_timer2, 0x4288B6,4, // spell case 522/528/537/538/539
     {
         g_lock_timer = 0;
     })
-    EHOOK_DY(th14_lock_timer3, 0x427888,2, // set boss mode case 512
+    EHOOK_DY(th14_lock_timer3, 0x4289EA,5, // spellEnd case 523
     {
         g_lock_timer = 0;
     })
-    EHOOK_DY(th14_lock_timer4, 0x42C0D4,6, // decrease time (update)
+    EHOOK_DY(th14_lock_timer4, 0x427888,2, // set boss mode case 512
+    {
+        g_lock_timer = 0;
+    })
+    EHOOK_DY(th14_lock_timer5, 0x42C0D4,6, // decrease time (update)
     {
         g_lock_timer_flag = true;
     })

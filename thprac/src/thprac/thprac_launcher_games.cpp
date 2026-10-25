@@ -1861,7 +1861,7 @@ public:
 
         return result;
     }
-    static DWORD WINAPI WaitAndApplyTHPrac(std::wstring& exePath)
+    static DWORD WINAPI WaitAndApplyTHPrac(THPrac::THGameInst& currentInst, std::wstring currentInstDir, std::wstring& exePath)
     {
         auto& gameGui = THGameGui::singleton();
         bool isOmni = exePath == L"" ? true : false;
@@ -1888,6 +1888,9 @@ public:
                                 FALSE,
                                 procEntry.th32ProcessID);
                             if (hProc) {
+                                if (currentInst.type == TYPE_NYASAMA && currentInst.useOILP) {
+                                    CheckAndLoadOILP(hProc, currentInstDir);
+                                }
                                 auto result = (WriteTHPracSig(hProc, base) && LocalApplyTHPrac(hProc));
                                 CloseHandle(hProc);
                                 return result ? 1 : 0;
@@ -1923,6 +1926,34 @@ public:
                 return 0;
             WaitForSingleObject(t, INFINITE);
             return 1;
+        }
+
+        return 0;
+    }
+    static DWORD WINAPI CheckAndLoadOILP(HANDLE hProcess, std::wstring& dir)
+    {
+        auto oilpPath = dir + L"openinputlagpatch.dll";
+        bool isRelative = false;
+        LauncherSettingGet("use_relative_path", isRelative);
+        if (isRelative) {
+            WCHAR full_path[256];
+            GetFullPathName(oilpPath.c_str(), 256, full_path, 0);
+            oilpPath = std::wstring(full_path);
+        }
+        if (CheckDLLFunction(oilpPath.c_str(), "oilp_set_game_fps")) {
+            auto oilpNameLength = (oilpPath.size() + 1) * sizeof(wchar_t);
+            auto pLoadLibrary = ::LoadLibraryW;
+            auto remoteStr = VirtualAllocEx(hProcess, NULL, oilpNameLength, MEM_COMMIT | MEM_RESERVE, PAGE_EXECUTE_READWRITE);
+            if (!remoteStr)
+                return 0;
+            defer(VirtualFreeEx(hProcess, remoteStr, 0, MEM_RELEASE));
+            WriteProcessMemory(hProcess, remoteStr, oilpPath.data(), oilpNameLength, NULL);
+            auto t = CreateRemoteThread(hProcess, NULL, 0, (LPTHREAD_START_ROUTINE)pLoadLibrary, remoteStr, 0, NULL);
+            if (t) {
+                WaitForSingleObject(t, INFINITE);
+                CloseHandle(t);
+                return 1;
+            }
         }
 
         return 0;
@@ -1966,21 +1997,7 @@ public:
         uintptr_t base = GetGameModuleBase(proc_info.hProcess);
 
         if (currentInst.useOILP) {
-            std::wstring path = currentInstDir + L"openinputlagpatch.dll";
-            if (CheckDLLFunction(path.c_str(), "oilp_set_game_fps")) {
-                auto oilpNameLength = (path.size() + 1) * sizeof(wchar_t);
-                auto pLoadLibrary = ::LoadLibraryW;
-                auto remoteStr = VirtualAllocEx(proc_info.hProcess, NULL, oilpNameLength, MEM_COMMIT | MEM_RESERVE, PAGE_EXECUTE_READWRITE);
-                if (!remoteStr)
-                    return 0;
-                defer(VirtualFreeEx(proc_info.hProcess, remoteStr, 0, MEM_RELEASE));
-                WriteProcessMemory(proc_info.hProcess, remoteStr, path.data(), oilpNameLength, NULL);
-                auto t = CreateRemoteThread(proc_info.hProcess, NULL, 0, (LPTHREAD_START_ROUTINE)pLoadLibrary, remoteStr, 0, NULL);
-                if (t) {
-                    WaitForSingleObject(t, INFINITE);
-                    CloseHandle(t);
-                }
-            }
+            CheckAndLoadOILP(proc_info.hProcess, currentInstDir);
         }
         else if (currentInst.useVpatch) {
             auto exeName = GetNameFromFullPath(currentInstPath);
@@ -2082,7 +2099,7 @@ public:
         }
 
         if ((currentCatagory == CAT_MAIN || currentCatagory == CAT_SPINOFF_STG) && currentInst.useTHPrac) {
-            return WaitAndApplyTHPrac(currentInstExePath);
+            return WaitAndApplyTHPrac(currentInst, currentInstDir, currentInstExePath);
         }
 
         return 1;
@@ -2363,6 +2380,7 @@ public:
         if (currentCatagory == CAT_MAIN || currentCatagory == CAT_SPINOFF_STG) {
             switch (currentInst.type) {
             case TYPE_ORIGINAL:
+            case TYPE_NYASAMA:
                 GameVpatchSelection(currentInst);
                 if (ImGui::Checkbox(S(THPRAC_GAMES_APPLY_THPRAC), &currentInst.useTHPrac)) {
                     WriteGameCfg();
@@ -2370,7 +2388,6 @@ public:
                 break;
             case TYPE_THCRAP:
             case TYPE_STEAM:
-            case TYPE_NYASAMA:
                 if (ImGui::Checkbox(S(THPRAC_GAMES_APPLY_THPRAC), &currentInst.useTHPrac)) {
                     WriteGameCfg();
                 }

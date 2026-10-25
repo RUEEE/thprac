@@ -2312,19 +2312,23 @@ namespace TH12 {
                 break;
         }
     })
-    EHOOK_DY(th12_lock_timer1, 0x41D4E5,6, // initialize
+    EHOOK_DY(th12_lock_timer1, 0x41D4E5, 6, // initialize
     {
         g_lock_timer = 0;
     })
-    EHOOK_DY(th12_lock_timer2, 0x418745,5, // SetNextPattern case 414
+    EHOOK_DY(th12_lock_timer2, 0x418975, 5, // EndSpellCard case 423
     {
         g_lock_timer = 0;
     })
-    EHOOK_DY(th12_lock_timer3, 0x417AEF,2, // set boss mode case 412
+    EHOOK_DY(th12_lock_timer3, 0x419159, 5, // SetChapter case 424
     {
         g_lock_timer = 0;
     })
-    EHOOK_DY(th12_lock_timer4, 0x41A821,6, // decrease time (update)
+    EHOOK_DY(th12_lock_timer4, 0x417AEF, 2, // set boss mode case 412
+    {
+        g_lock_timer = 0;
+    })
+    EHOOK_DY(th12_lock_timer5, 0x41A821, 6, // decrease time (update)
     {
         g_lock_timer_flag = true;
     })
