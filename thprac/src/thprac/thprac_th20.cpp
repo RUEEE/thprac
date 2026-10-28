@@ -4005,6 +4005,7 @@ namespace TH20 {
         while (iter) {
             DWORD patt = *(DWORD*)(iter);
             if(patt){
+                int att = *(int*)(patt + 0x94);
                 if ((*(DWORD*)(patt + 0x14)) & 1) {
                    
                     if ((*(DWORD*)(patt + 0x14)) & 0x2) // round
@@ -4015,6 +4016,7 @@ namespace TH20 {
                         float r = *(float*)(patt + 0x18);
                         p->AddCircleFilled(cen, GetClientFromStage2(r), 0x33FF0000);
                         p->AddCircle(cen, GetClientFromStage2(r), 0xFFFF0000);
+                        p->AddText({ cen.x, cen.y - 20.0f }, 0xFFFFFFFF, std::format("{}", att).c_str());
                     } else {
                         float x = *(float*)(patt + 0x34);
                         float y = *(float*)(patt + 0x38);
@@ -4040,6 +4042,7 @@ namespace TH20 {
                         p4 = GetClientFromStage(p4);
                         p->AddQuadFilled(p1, p2, p3, p4, 0x33FF0000);
                         p->AddQuad(p1, p2, p3, p4, 0xFFFF0000);
+                        p->AddText({ p1.x, p1.y - 20.0f }, 0xFFFFFFFF, std::format("{}", att).c_str());
                     }
                 }
             }

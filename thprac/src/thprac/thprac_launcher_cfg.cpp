@@ -2783,7 +2783,7 @@ private:
     THCfgCheckbox mInitWindowPos { "init_window_pos", true };
     THCfgCheckbox mDisableLocaleChangeHotkey { "disable_locale_change_hotkey", true };
     THCfgCheckbox mCfgEnableTH16_CrashFix_autoly { "auto_th16_crash_fix", false };
-    THCfgCheckbox mCfgEnableTH14_MarisaFix_autoly { "auto_th14_fix_marisa_bug_using_0", false };
+    THCfgCheckbox mCfgEnableTH14_MarisaFix_autoly { "auto_th14_fix_marisa_bug_using_0", true };
 
     THCfgCheckbox mWindowSizeChangeWhenOpen { "change_window_size_when_open", false };
     THCfgInt2 mWindowSize { "changed_window_size", {1920,1440},1,8192 };
