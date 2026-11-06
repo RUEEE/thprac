@@ -148,6 +148,9 @@ struct adv_opt_ctx {
     oilp_set_fps_t* oilp_set_game_fps = NULL;
     oilp_set_fps_t* oilp_set_replay_skip_fps = NULL;
     oilp_set_fps_t* oilp_set_replay_slow_fps = NULL;
+
+    typedef void __stdcall oilp_set_renderer_t(void (*updatefunc)());
+    oilp_set_renderer_t* oilp_set_renderer = NULL;
 };
 
 void MsgBox(UINT type, const char* title, const char* msg, const char* msg2 = nullptr, HWND owner = nullptr);

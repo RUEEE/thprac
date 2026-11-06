@@ -4,6 +4,7 @@
 
 namespace THPrac {
 namespace TH143 {
+    __declspec(noinline) void THGuiUpdate();
     class THOverlay : public Gui::GameGuiWnd {
         THOverlay() noexcept
         {
@@ -102,6 +103,8 @@ namespace TH143 {
         {
             if ((mOptCtx.vpatch_base = (uintptr_t)GetModuleHandleW(L"openinputlagpatch.dll")) != NULL) {
                 OILPInit(mOptCtx);
+                if (mOptCtx.oilp_set_renderer)
+                    mOptCtx.oilp_set_renderer(THGuiUpdate);
             } else if (*(uint8_t*)0x4e49c9 == 3) {
                 mOptCtx.fps_status = 1;
 

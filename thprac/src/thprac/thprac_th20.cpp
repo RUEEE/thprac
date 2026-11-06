@@ -2058,8 +2058,9 @@ namespace TH20 {
         void FpsInit()
         {
             mOptCtx.fps_dbl = 60.0;
-
-            if (GetMemContent<uint8_t>(RVA(0x1C4F89)) == 3) {
+            if ((mOptCtx.vpatch_base = (uintptr_t)GetModuleHandleW(L"openinputlagpatch.dll")) != NULL) {
+                OILPInit(mOptCtx);
+            }else if (GetMemContent<uint8_t>(RVA(0x1C4F89)) == 3) {
                 mOptCtx.fps_status = 1;
 
                 DWORD oldProtect;
@@ -2071,7 +2072,11 @@ namespace TH20 {
         }
         void FpsSet()
         {
-            if (mOptCtx.fps_status == 1) {
+            if (mOptCtx.fps_status == 3) {
+                mOptCtx.oilp_set_game_fps(mOptCtx.fps);
+                mOptCtx.oilp_set_replay_skip_fps(mOptCtx.fps_replay_fast);
+                mOptCtx.oilp_set_replay_slow_fps(mOptCtx.fps_replay_slow);
+            } else  if (mOptCtx.fps_status == 1) {
                 mOptCtx.fps_dbl = (double)mOptCtx.fps;
             }
         }

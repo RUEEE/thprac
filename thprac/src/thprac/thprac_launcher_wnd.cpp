@@ -216,8 +216,23 @@ int LauncherWndInit(unsigned int width, unsigned int height, unsigned int maxWid
             }
         }
     }
-    auto wndPosX = (displayX - widthCurrent) / 2;
-    auto wndPosY = (displayY - heightCurrent) / 2;
+
+    widthCurrent = (widthCurrent > displayX) ? displayX*0.75 : widthCurrent;
+    heightCurrent = (heightCurrent > displayY) ? displayY*0.75 : heightCurrent;
+
+    maxWidth = (maxWidth > displayX) ? displayX * 0.75 : maxWidth;
+    maxHeight = (maxHeight > displayY) ? displayY * 0.75 : maxHeight;
+
+    if (widthCurrent < 0)
+        widthCurrent = 0;
+    if (heightCurrent < 0)
+        heightCurrent = 0;
+    int wndPosX = ((int)displayX - (int)widthCurrent) / 2;
+    int wndPosY = ((int)displayY - (int)heightCurrent) / 2;
+    if (wndPosX < 0)
+        wndPosX = 0;
+    if (wndPosY < 0)
+        wndPosY = 0;
     SetWindowPos(__thprac_lc_hwnd, 0, wndPosX, wndPosY, widthCurrent, heightCurrent, 0);
 
     // Initialize Direct3D

@@ -4,6 +4,7 @@
 
 namespace THPrac {
 namespace TH125 {
+    __declspec(noinline) void THGuiUpdate();
     class THOverlay : public Gui::GameGuiWnd {
         THOverlay() noexcept
         {
@@ -97,6 +98,8 @@ namespace TH125 {
         {
             if ((mOptCtx.vpatch_base = (uintptr_t)GetModuleHandleW(L"openinputlagpatch.dll")) != NULL) {
                 OILPInit(mOptCtx);
+                if(mOptCtx.oilp_set_renderer)
+                    mOptCtx.oilp_set_renderer(THGuiUpdate);
             } else if ((mOptCtx.vpatch_base = (uintptr_t)GetModuleHandleW(L"vpatch_th125.dll")) != NULL) {
                 uint64_t hash[2];
                 CalcFileHash(L"vpatch_th125.dll", hash);
